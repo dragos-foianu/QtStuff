@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    injector.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    injector.h
 
 FORMS    += mainwindow.ui
