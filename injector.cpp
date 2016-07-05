@@ -64,3 +64,41 @@ HANDLE Injector::getProcessHandle(char * targetProcessName)
 
     return pHandle;
 }
+
+std::vector<std::string> Injector::listProcesses()
+{
+    HANDLE pHandle = NULL;
+    DWORD runningProcesses[1024], cbNeeded;
+    std::vector<std::string> processList;
+
+    if (!EnumProcesses(runningProcesses, sizeof(runningProcesses), &cbNeeded))
+    {
+        return processList;
+    }
+
+    for (size_t i = 0; i < (cbNeeded / sizeof(DWORD)); i++)
+    {
+        if (runningProcesses[i] && (pHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, runningProcesses[i])))
+        {
+            HMODULE hModule;
+            DWORD cbNeeded;
+
+            /* Enumerate modules */
+            if (EnumProcessModules(pHandle, &hModule, sizeof(hModule), &cbNeeded))
+            {
+                char openedProcessName[MAX_PATH];
+
+                /* Get opened process name in ASCII and compare to target process name */
+                GetModuleBaseNameA(pHandle, hModule, (LPSTR) openedProcessName, sizeof(openedProcessName));
+
+                processList.push_back(std::string(openedProcessName));
+
+                /* Nope, close this process */
+                CloseHandle(pHandle);
+                pHandle = NULL;
+            }
+        }
+    }
+
+    return processList;
+}

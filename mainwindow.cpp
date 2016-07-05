@@ -2,14 +2,17 @@
 #include "ui_mainwindow.h"
 
 #include "injector.h"
-#include <QDebug>
+#include <QListWidget>
+#include <QString>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->textEdit->setText(QString("NoProcess.exe"));
+    ui->selectedProcess->setText(QString("Nothing injected."));
+    on_refreshButton_clicked();
 }
 
 MainWindow::~MainWindow()
@@ -19,11 +22,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_injectButton_clicked()
 {
-    qDebug() << "Injecting!";
-    Injector::injectDLL(Injector::getProcessHandle((char *) "chrome.exe"), "dllFile");
+    QString dllFile = QFileDialog::getOpenFileName(this, "Select DLL");
+    Injector::injectDLL(Injector::getProcessHandle((char *) "chrome.exe"), dllFile.toStdString().c_str());
 }
 
 void MainWindow::on_refreshButton_clicked()
 {
-    qDebug() << "Refreshing!";
+    std::vector<std::string> processList(Injector::listProcesses());
+
+    /* No duplicates please, we're only selecting based on process name */
+    std::sort(processList.begin(), processList.end());
+    processList.erase(std::unique(processList.begin(), processList.end()), processList.end());
+
+    for (std::vector<std::string>::iterator it = processList.begin(); it != processList.end() ; it++)
+    {
+        ui->processList->addItem(QString::fromStdString(*it));
+    }
 }

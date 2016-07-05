@@ -27,7 +27,7 @@
      <string>Inject</string>
     </property>
    </widget>
-   <widget class="QTextEdit" name="textEdit">
+   <widget class="QTextEdit" name="selectedProcess">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -60,6 +60,16 @@
     </property>
     <property name="text">
      <string>Refresh</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="processList">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>271</width>
+      <height>191</height>
+     </rect>
     </property>
    </widget>
   </widget>
