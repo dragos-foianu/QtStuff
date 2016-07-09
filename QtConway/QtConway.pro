@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    GOLWidget.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    GOLWidget.h
 
 FORMS    += mainwindow.ui
