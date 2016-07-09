@@ -93,7 +93,7 @@ std::vector<std::string> Injector::listProcesses()
 
                 processList.push_back(std::string(openedProcessName));
 
-                /* Nope, close this process */
+                /* Nope, close this handle */
                 CloseHandle(pHandle);
                 pHandle = NULL;
             }
