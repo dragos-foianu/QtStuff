@@ -14,9 +14,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->centralWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
     /* Setup slots */
-    connect(ui->delayEdit, SIGNAL(textEdited(QString)), gol, SLOT(setDelay(QString)));
-    connect(ui->sizeEdit, SIGNAL(textEdited(QString)), gol, SLOT(setCellSize(QString)));
-    connect(ui->evoEdit, SIGNAL(textEdited(QString)), gol, SLOT(setEvolutions(QString)));
+    connect(ui->delayEdit, SIGNAL(editingFinished()), this, SLOT(delayEdited()));
+    connect(ui->sizeEdit, SIGNAL(editingFinished()), this, SLOT(cellsizeEdited()));
+    connect(ui->evoEdit, SIGNAL(editingFinished()), this, SLOT(evolutionsEdited()));
     connect(ui->evolveButton, SIGNAL(clicked()), gol, SLOT(evolve()));
     connect(ui->pauseButton, SIGNAL(clicked()), gol, SLOT(pause()));
     connect(ui->resetButton, SIGNAL(clicked()), gol, SLOT(reset()));
@@ -38,6 +38,21 @@ void MainWindow::updateMetadata()
     } else {
         ui->evoEdit->setText(QString::number(gol->evolutions()));
     }
+}
+
+void MainWindow::delayEdited()
+{
+    gol->setDelay(ui->delayEdit->text());
+}
+
+void MainWindow::cellsizeEdited()
+{
+    gol->setCellSize(ui->sizeEdit->text());
+}
+
+void MainWindow::evolutionsEdited()
+{
+    gol->setEvolutions(ui->evoEdit->text());
 }
 
 MainWindow::~MainWindow()

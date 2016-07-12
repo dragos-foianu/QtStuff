@@ -18,6 +18,9 @@ public:
 
 private slots:
     void updateMetadata();
+    void delayEdited();
+    void cellsizeEdited();
+    void evolutionsEdited();
 
 private:
     Ui::MainWindow *ui;
