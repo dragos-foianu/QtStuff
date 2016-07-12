@@ -26,11 +26,13 @@ public slots:
 
     void setDelay(QString msec);
     void setCellSize(QString csize);
+    void setEvolutions(QString evolutions);
 
 public:
     int delay();
     int generations();
     int population();
+    int evolutions();
     int cellsize();
 
 signals:
@@ -40,7 +42,9 @@ private:
     QTimer *timer;
     int gen;
     int pop;
+    int evos;
     int cellSize;
+    int currentEvo;
 };
 
 #endif // GOLWIDGET_H

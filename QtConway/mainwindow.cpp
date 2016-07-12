@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     /* Setup slots */
     connect(ui->delayEdit, SIGNAL(textEdited(QString)), gol, SLOT(setDelay(QString)));
     connect(ui->sizeEdit, SIGNAL(textEdited(QString)), gol, SLOT(setCellSize(QString)));
+    connect(ui->evoEdit, SIGNAL(textEdited(QString)), gol, SLOT(setEvolutions(QString)));
     connect(ui->evolveButton, SIGNAL(clicked()), gol, SLOT(evolve()));
     connect(ui->pauseButton, SIGNAL(clicked()), gol, SLOT(pause()));
     connect(ui->resetButton, SIGNAL(clicked()), gol, SLOT(reset()));
@@ -26,12 +27,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::updateMetadata()
 {
-    qDebug() << "Updating universe data: gen = \"" << gol->generations() <<
-                "\", pop = \"" << gol->population() << "\"";
+    qDebug() << "MainWindow::updateMetadata()";
     ui->genEdit->setText(QString::number(gol->generations()));
     ui->popEdit->setText(QString::number(gol->population()));
     ui->delayEdit->setText(QString::number(gol->delay()));
     ui->sizeEdit->setText(QString::number(gol->cellsize()));
+
+    if (gol->evolutions() < 0) {
+        ui->evoEdit->setText("Infinite");
+    } else {
+        ui->evoEdit->setText(QString::number(gol->evolutions()));
+    }
 }
 
 MainWindow::~MainWindow()

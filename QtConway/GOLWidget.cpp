@@ -7,7 +7,8 @@ GOLWidget::GOLWidget(QWidget *parent) :
     timer(new QTimer()),
     gen(0),
     pop(0),
-    cellSize(12)
+    cellSize(12),
+    evos(-1)
 {
     timer->setInterval(1000);
     /* Timer timeout means new evolution */
@@ -35,15 +36,13 @@ void GOLWidget::paintGrid(QPainter &p)
     gridColor.setAlpha(30);
     p.setPen(gridColor);
 
-    double horizontalSpacing = ((double) width()) / (width() / 12);
-    for (double i = horizontalSpacing; i <= width(); i += horizontalSpacing)
-    {
+    double horizontalSpacing = ((double) width()) / (width() / cellSize);
+    for (double i = horizontalSpacing; i <= width(); i += horizontalSpacing) {
         p.drawLine(i, 0, i, height());
     }
 
-    double verticalSpacing = ((double) height()) / (height() / 12);
-    for (double i = verticalSpacing; i <= height(); i += verticalSpacing)
-    {
+    double verticalSpacing = ((double) height()) / (height() / cellSize);
+    for (double i = verticalSpacing; i <= height(); i += verticalSpacing) {
         p.drawLine(0, i, width(), i);
     }
 
@@ -66,19 +65,19 @@ void GOLWidget::processEvolution()
 
 void GOLWidget::evolve()
 {
-    qDebug() << "Evolve";
+    qDebug() << "GOLWidget::evolve()";
     timer->start();
 }
 
 void GOLWidget::pause()
 {
-    qDebug() << "Pause";
+    qDebug() << "GOLWidget::pause()";
     timer->stop();
 }
 
 void GOLWidget::reset()
 {
-    qDebug() << "Reset";
+    qDebug() << "GOLWidget::reset()";
     timer->stop();
     gen = 0;
     pop = 0;
@@ -88,15 +87,12 @@ void GOLWidget::reset()
 void GOLWidget::setCellSize(QString csize)
 {
     int size = csize.toInt();
-    if (size < 5)
-    {
-        qDebug() << "Set size = \"5\"";
-        cellSize = 5;
-    }
-    else
-    {
-        qDebug() << "Set cellsize = " << size;
+    if (size < 5) {
+        qDebug() << "GOLWidget::setCellSize(" << size << ") bad input";
+    } else {
+        qDebug() << "GOLWidget::setCellSize(" << size << ") successful";
         cellSize = size;
+        this->update();
     }
     signalMetadataChanged();
 }
@@ -104,15 +100,24 @@ void GOLWidget::setCellSize(QString csize)
 void GOLWidget::setDelay(QString msec)
 {
     int delay = msec.toInt();
-    if (delay < 1)
-    {
-        qDebug() << "Set delay = \"1\" msec";
-        timer->setInterval(1);
-    }
-    else
-    {
-        qDebug() << "Set delay = " << msec << " msec";
+    if (delay < 1) {
+        qDebug() << "GOLWidget::setDelay(" << delay << ") bad input";
+    } else {
+        qDebug() << "GOLWidget::setDelay(" << delay << ") successful";
         timer->setInterval(delay);
+    }
+    signalMetadataChanged();
+}
+
+void GOLWidget::setEvolutions(QString evolutions)
+{
+    int evols = evolutions.toInt();
+    if (evols == 0) {
+        qDebug() << "GOLWidget::setEvolutions(" << evols << ") infinite";
+        evos = -1;
+    } else {
+        qDebug() << "GOLWidget::setEvolutions(" << evols << ") successful";
+        evos = evols;
     }
     signalMetadataChanged();
 }
@@ -135,4 +140,9 @@ int GOLWidget::population()
 int GOLWidget::cellsize()
 {
     return cellSize;
+}
+
+int GOLWidget::evolutions()
+{
+    return evos;
 }
