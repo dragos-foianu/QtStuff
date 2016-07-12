@@ -193,6 +193,27 @@
           </property>
          </spacer>
         </item>
+        <item row="17" column="0">
+         <widget class="QPushButton" name="evolveButton">
+          <property name="text">
+           <string>Evolve</string>
+          </property>
+         </widget>
+        </item>
+        <item row="18" column="0">
+         <widget class="QPushButton" name="pauseButton">
+          <property name="text">
+           <string>Pause</string>
+          </property>
+         </widget>
+        </item>
+        <item row="19" column="0">
+         <widget class="QPushButton" name="resetButton">
+          <property name="text">
+           <string>Reset</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>

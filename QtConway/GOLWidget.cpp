@@ -3,8 +3,16 @@
 #include <QColor>
 
 GOLWidget::GOLWidget(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    timer(new QTimer()),
+    gen(0),
+    pop(0),
+    cellSize(12)
 {
+    timer->setInterval(1000);
+    /* Timer timeout means new evolution */
+    connect(timer, SIGNAL(timeout()), this, SLOT(processEvolution()));
+    connect(this, SIGNAL(signalMetadataChanged()), parent, SLOT(updateMetadata()));
 }
 
 GOLWidget::~GOLWidget()
@@ -48,4 +56,83 @@ void GOLWidget::paintGrid(QPainter &p)
     p.drawLine(right, bottom, right, top);
 
     p.drawRect(grid);
+}
+
+void GOLWidget::processEvolution()
+{
+    gen++;
+    signalMetadataChanged();
+}
+
+void GOLWidget::evolve()
+{
+    qDebug() << "Evolve";
+    timer->start();
+}
+
+void GOLWidget::pause()
+{
+    qDebug() << "Pause";
+    timer->stop();
+}
+
+void GOLWidget::reset()
+{
+    qDebug() << "Reset";
+    timer->stop();
+    gen = 0;
+    pop = 0;
+    signalMetadataChanged();
+}
+
+void GOLWidget::setCellSize(QString csize)
+{
+    int size = csize.toInt();
+    if (size < 5)
+    {
+        qDebug() << "Set size = \"5\"";
+        cellSize = 5;
+    }
+    else
+    {
+        qDebug() << "Set cellsize = " << size;
+        cellSize = size;
+    }
+    signalMetadataChanged();
+}
+
+void GOLWidget::setDelay(QString msec)
+{
+    int delay = msec.toInt();
+    if (delay < 1)
+    {
+        qDebug() << "Set delay = \"1\" msec";
+        timer->setInterval(1);
+    }
+    else
+    {
+        qDebug() << "Set delay = " << msec << " msec";
+        timer->setInterval(delay);
+    }
+    signalMetadataChanged();
+}
+
+int GOLWidget::delay()
+{
+    return timer->interval();
+}
+
+int GOLWidget::generations()
+{
+    return gen;
+}
+
+int GOLWidget::population()
+{
+    return pop;
+}
+
+int GOLWidget::cellsize()
+{
+    return cellSize;
 }
