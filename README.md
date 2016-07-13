@@ -11,6 +11,6 @@ A simple Notepad.
 
 A Windows DLL Injector.
 
-###### QtConway
+###### QtConway (in progress)
 
 An implementation of Conway's Game of Life.
